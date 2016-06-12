@@ -7,25 +7,25 @@ using namespace std;
 #define  LongType unsigned long
 struct NodeInfo
 {
-	unsigned char _ch; //×Ö·û
-	LongType _count;   //³öÏÖ´ÎÊı
+	unsigned char _ch; //å­—ç¬¦
+	LongType _count;   //å‡ºç°æ¬¡æ•°
 	string _code;     //Huffman code
-	//¹¹Ôìº¯Êı
+	//æ„é€ å‡½æ•°
 	NodeInfo(LongType _count = 0)
 		:_ch(0)
 		, _count(_count)
 	{}
-	//==µÄÖØÔØ
+	//==çš„é‡è½½
 	bool operator ==(NodeInfo cmp2)const
 	{
 		return _count == cmp2._count;
 	}
-	//ÖØÔØ+
+	//é‡è½½+
 	NodeInfo operator +(NodeInfo& tmp)
 	{
 		return _count + tmp._count;
 	}
-	//ÖØÔØ<
+	//é‡è½½<
 	bool operator <(NodeInfo cmp2)const
 	{
 		return _count < cmp2._count;
@@ -37,7 +37,7 @@ class FileCompress
 public:
 	void Compress(const char *filename)
 	{
-		/*******************Í³¼Æ×Ö·ûºÍ×Ö·û³öÏÖµÄ´ÎÊı********************/
+		/*******************ç»Ÿè®¡å­—ç¬¦å’Œå­—ç¬¦å‡ºç°çš„æ¬¡æ•°********************/
 		FILE *Fout = fopen(filename, "rb");
 		assert(Fout);
 	    char ch = fgetc(Fout);
@@ -49,7 +49,7 @@ public:
 		}
 		/**************************************************************/
 
-		/**********************¹¹½¨HuffmanTree»ñµÃHuffman±àÂë***********/
+		/**********************æ„å»ºHuffmanTreeè·å¾—Huffmanç¼–ç ***********/
 		NodeInfo tmp = (0);
 		HuffmanTree<NodeInfo>_tree(_infos, 256, tmp);
 		string name = "testi.txt";
@@ -58,7 +58,7 @@ public:
 		GenerateHuffmanCode(_tree.Top(), code, Fin1);
 		fclose(Fin1);
 		/**************************************************************/
-		/*********************ÎÄ¼şÑ¹Ëõ  ******************************/
+		/*********************æ–‡ä»¶å‹ç¼©  ******************************/
 		name = "test1.txt";
 		FILE * Fin = fopen(name.c_str(), "wb");
 		assert(Fin);
@@ -106,7 +106,7 @@ public:
 	
 	void UnCompress(const char *filename)
 	{
-		//³õÊ¼»¯_infos[]
+		//åˆå§‹åŒ–_infos[]
 		string code;
 		FILE * Fout1 = fopen("testi.txt", "rb");
 		unsigned char ch = fgetc(Fout1);
@@ -120,12 +120,12 @@ public:
 			ch = fgetc(Fout1);
 		}
 
-		//¹¹½¨Huffmanshu
+		//æ„å»ºHuffmanshu
 		NodeInfo tmp = (0);
 		HuffmanTree<NodeInfo>_tree(_infos, 256, tmp);
 
 
-		//¶ÁÈ¡Ñ¹ËõÎÄ¼ş£¬½âÑ¹ÎÄ¼ş
+		//è¯»å–å‹ç¼©æ–‡ä»¶ï¼Œè§£å‹æ–‡ä»¶
 		string name(filename);
 		FILE* Fout = fopen(name.c_str(), "rb");
 		name += ".uncompress";
@@ -191,10 +191,7 @@ protected:
 			GenerateHuffmanCode(root->_left, code + '0',Fin);
 			GenerateHuffmanCode(root->_right, code + '1',Fin);
 		}
-		for (int i = 0; i < code.size() ; i++)
-		{
-			root->_weight._code += code[i];
-		}
+		root->_weight._code = code;
 		if (root->_left == NULL && root->_right == NULL)
 		{
 			_infos[root->_weight._ch]._code = root->_weight._code;
